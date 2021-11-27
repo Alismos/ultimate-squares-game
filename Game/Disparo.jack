@@ -1,0 +1,194 @@
+class Disparo {
+
+   field int x, y; // posicion en pantalla
+   field int tamano; // lado del Vaquero "tamaño"
+   field int trayecto;
+
+   constructor Disparo new(int valor_x, int valor_y, int valor_tamano) {
+      let x = valor_x;
+      let y = valor_y;
+      let tamano = valor_tamano;
+      let trayecto = 1;
+      return this;
+   }
+
+   method int getTrayecto(){
+      return trayecto;
+   }
+   method int getX(){
+      return x;
+   }
+
+   method int getY(){
+      return y;
+   }
+
+   method void setX(int value){
+      let x = value;
+      
+      return;
+   }
+
+   method void setY(int value){
+      let y = value;
+
+      return;
+   }
+
+   /** liberar memoria */
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   /** borrar la figurar en la pantalla */
+   method void borrar() {
+      do Screen.setColor(false);
+      do Screen.drawRectangle(x, y, x + tamano, y + tamano);
+      return;
+   }
+
+   method int moverArriba() {
+      if (y > 1) {
+         do Screen.setColor(false);
+         do Screen.drawRectangle(x, (y + tamano) - 1, x + tamano, y + tamano);
+         let y = y - 2;
+         
+         do Screen.setColor(true);
+         do Screen.drawRectangle(x, y, x + tamano, y + 1);
+         
+      } 
+      else{
+         let trayecto = 0; 
+         do borrar();
+      }
+      
+      return 0;
+   }
+
+   method void moverAbajo() {
+      if ((y + tamano) < 254) {
+         do Screen.setColor(false);
+         do Screen.drawRectangle(x, y, x + tamano, y + 1);
+         let y = y + 2;
+         do Screen.setColor(true);
+         do Screen.drawRectangle(x, (y + tamano) - 1, x + tamano, y + tamano);
+         
+      }
+      else{
+         let trayecto = 0; 
+         do borrar(); 
+      }
+      return;
+   }
+
+   method void moverIzq() {
+      if (x > 1) {
+         do Screen.setColor(false);
+         do Screen.drawRectangle((x + tamano) - 1, y, x + tamano, y + tamano);
+         let x = x - 2;
+         do Screen.setColor(true);
+         do Screen.drawRectangle(x, y, x + 1, y + tamano);
+         
+      }
+      else{  
+         let trayecto = 0; 
+         do borrar();  
+      }
+      return;
+   }
+
+   method void moverDer() {
+      if ((x + tamano) < 510) {
+         do Screen.setColor(false);
+         do Screen.drawRectangle(x, y, x + 1, y + tamano);
+         let x = x + 2;
+         do Screen.setColor(true);
+         do Screen.drawRectangle((x + tamano) - 1, y, x + tamano, y + tamano);
+         
+      }
+      else{
+         let trayecto = 0; 
+         do borrar();
+      }
+      return;
+   }
+
+   method void moverIzqArr() {
+      if ((y > 1) & (x > 1) ) {
+         do Screen.setColor(false);
+         do Screen.drawRectangle(x, (y+tamano)-1, x + tamano, y + tamano);               // limpiar abajo
+         do Screen.drawRectangle((x+tamano)-1, y, x + tamano, y + tamano);               // limpiar derecha
+         let x = x - 2;
+         let y = y - 2;
+         do Screen.setColor(true);
+         do Screen.drawRectangle(x, y, x + tamano, y + tamano);
+        
+      }
+      else{
+         let trayecto = 0; 
+         do borrar();
+      }
+      return;
+   }
+
+   method void moverDerArr() {
+      if ((y > 1) & ((x+tamano) < 510))  {
+         do Screen.setColor(false);
+         do Screen.drawRectangle(x, (y+tamano)-1, x + tamano, y + tamano);                //limpiar abajo
+         do Screen.drawRectangle(x, y, x + 1, y + tamano);                                //limpiar izquierda
+         let x = x + 2;
+         let y = y - 2;
+         do Screen.setColor(true);
+         do Screen.drawRectangle(x, y, x + tamano, y + tamano);
+        
+      }
+      else{
+         let trayecto = 0; 
+         do borrar();  
+      }
+      return;
+   }
+
+   method void moverIzqAbaj() {
+      if (((y+tamano) < 254) & (x > 1))  {
+         do Screen.setColor(false);
+         do Screen.drawRectangle((x+tamano)-1, y, x + tamano, y + tamano);                //limpiar derecha
+         do Screen.drawRectangle(x, y, x + tamano, y + 1);                                //limpiar arriba
+         let x = x - 2;
+         let y = y + 2;
+         do Screen.setColor(true);
+         do Screen.drawRectangle(x, y, x + tamano, y + tamano);
+         
+      }
+      else{
+         let trayecto = 0; 
+         do borrar();  
+      }
+      return;
+   }
+
+   method void moverDerAbaj() {
+      if (((y+tamano) < 254) & ((x+tamano) < 510))  {
+         do Screen.setColor(false);
+         do Screen.drawRectangle(x, y, x + 1, y + tamano);                                //limpiar izquierda
+         do Screen.drawRectangle(x, y, x + tamano, y + 1);                                //limpiar arriba
+         let x = x + 2;
+         let y = y + 2;
+         do Screen.setColor(true);
+         do Screen.drawRectangle(x, y, x + tamano, y + tamano);
+        
+      }
+      else{   
+         let trayecto = 0; 
+         do borrar();
+      }
+      return;
+   }
+
+   method void printCube(){
+      do Screen.setColor(true);
+      do Screen.drawRectangle(x, y, x + tamano, y + tamano);
+      return;
+   }
+}

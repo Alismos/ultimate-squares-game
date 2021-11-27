@@ -1,0 +1,845 @@
+
+class JuegoVaqueros {
+  
+   field Cowboy cuadrado; 
+   field int direccion; 
+   
+   field Cowboy cuadrado2;
+   field int direccion2;
+
+   field Cowboy cuadrado3;
+   field int direccion3;
+
+   field Cowboy cuadrado4;
+   field int direccion4;
+
+   field Disparo proyectil;
+   field Disparo proyectil2;
+   field Disparo proyectil3;
+   field Disparo proyectil4;
+
+   field int dispararAbajArriba;
+   field int dispararAbajArribaIzq;
+   field int dispararAbajArribaDer;
+
+   field int dispararDer;
+   field int dispararDerIzq;
+   field int dispararDerDer;
+
+   field int dispararIzq;
+   field int dispararIzqIzq;
+   field int dispararIzqDer;
+
+   field int dispararArr;
+   field int dispararArrIzq;
+   field int dispararArrDer;
+
+   field int disparos4;
+   field int disparos3;
+   field int disparos2;
+   field int disparos1;
+
+   field int trayecto;
+   field int trayecto2;
+   field int trayecto3;
+   field int trayecto4;
+
+   field int tamano;
+   field int tamanoDis;
+   field int posX1;
+   field int posY1;
+
+   field int posX2;
+   field int posY2;
+
+   field int posX3;
+   field int posY3;
+   
+   field int posX4;
+   field int posY4;
+
+   field int tempX1;
+   field int tempY1;
+
+   field int looser;
+   field int looser2;
+
+   field boolean loose1;
+   field boolean loose2;
+   field boolean loose3;
+   field boolean loose4;
+
+   constructor JuegoVaqueros new() {
+      // crea un cuadrado de 30x30 en la esquina superior izquierda en la pantalla
+      let cuadrado = Cowboy.new(0, 127, 30);
+      let cuadrado2 = Cowboy.new(225,0,30);
+      let cuadrado3 = Cowboy.new(480,127,30);
+      let cuadrado4 = Cowboy.new(225,225,30);
+
+      //Direcciones
+      let direccion = 0;  
+      let direccion2 = 0;
+      let direccion3 = 0;
+      let direccion4 = 0;
+      
+      //Variables direccion disparos
+      let dispararAbajArriba = 0;
+      let dispararAbajArribaIzq = 0;
+      let dispararAbajArribaDer = 0;
+
+      let dispararDer = 0;
+      let dispararDerIzq = 0;
+      let dispararDerDer = 0;
+
+      let dispararIzq = 0;
+      let dispararIzqIzq = 0;
+      let dispararIzqDer = 0;
+
+      let dispararArr = 0;
+      let dispararArrIzq = 0;
+      let dispararArrDer = 0;
+
+      //variables de posicion
+      let posX4 = 0;
+      let posY4 = 0;
+
+      let posX3 = 0;
+      let posY3 = 0;
+
+      let posX1 = 0;
+      let posY1 = 0;
+
+      let posX2 = 0;
+      let posY2 = 0;
+
+      let tempX1 = 0;
+      let tempY1 = 0;
+      
+      let tamano = 30;
+      let tamanoDis = 20;
+      //contador de disparos
+      let disparos3 = 0;
+      let disparos4 = 0;
+      let disparos2 = 0;
+      let disparos1 = 0;
+      //variables de derrota
+      let loose1 = false;
+      let loose2 = false;
+      let loose3 = false;
+      let loose4 = false;
+
+      //variables de perdedor
+      let looser = 0;
+      let looser2 = 0;
+      //variables de contacto
+      let trayecto = 0;
+      let trayecto2 = 0;
+      let trayecto3 = 0;
+      let trayecto4 = 0;
+
+      return this;
+   }
+
+   /** liberar memoria del juego */
+   method void dispose() {
+      do cuadrado.dispose();
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   /** movimientos del cuadrado */
+   method void moverCuadrado() {
+      
+      if (direccion = 1) { do cuadrado.moverArriba(); }
+      if (direccion = 2) { do cuadrado.moverAbajo(); }
+      
+      if (direccion2 = 1) { do cuadrado2.moverIzq(); }
+      if (direccion2 = 2) { do cuadrado2.moverDer(); }
+      
+      if (direccion3 = 1) { do cuadrado3.moverArriba(); }
+      if (direccion3 = 2) { do cuadrado3.moverAbajo(); }
+      
+      
+      if (direccion4 = 1) { do cuadrado4.moverIzq(); }
+      if (direccion4 = 2) { do cuadrado4.moverDer(); }
+
+      if (dispararAbajArriba = 1) { 
+         if(trayecto < 1){
+            let posX4 = cuadrado4.getX();
+            let posY4 = cuadrado4.getY()-16;
+
+            let disparos4 = disparos4 + 1;
+
+            let proyectil = Disparo.new(posX4, posY4,15);
+            let trayecto = 1;
+            
+            do cuadrado4.dibujar();
+         }
+         else{
+            if(disparos4 < 11){
+            //Consulta si ya toco pared el disparo
+            let trayecto = proyectil.getTrayecto();
+
+            if(trayecto < 1 ){
+               let dispararAbajArriba = 0;   
+            }
+            else{
+               
+               let posX2 = cuadrado2.getX();
+               let posY2 = cuadrado2.getY();
+
+               let tempX1 = proyectil.getX();
+               let tempY1 = proyectil.getY();
+
+               if(((((tempX1 + tamanoDis) > posX2) & (tempY1  < (posY2 + tamano))) & ((tempX1 + tamanoDis) < (posX2 + tamano) )) | (((tempX1  > posX2) & (tempY1 < (posY2 + tamano))) & (tempX1 < (posX2 + tamano)))){
+                  let direccion2 = 0;
+                  do cuadrado2.borrar();
+                  let loose2 = true;
+               }
+
+               do proyectil.moverArriba();
+
+            }
+            
+         }
+       }
+      }
+
+      if(dispararAbajArribaIzq = 1){
+          if(trayecto < 1){
+            let posX4 = cuadrado4.getX();
+            let posY4 = cuadrado4.getY()-16;
+
+            let disparos4 = disparos4 + 1;
+
+            let proyectil = Disparo.new(posX4, posY4, 15);
+            let trayecto = 1;
+            
+            do cuadrado4.dibujar();
+         }
+         else{
+            if(disparos4 < 11){
+            //Consulta si ya toco pared el disparo
+            let trayecto = proyectil.getTrayecto();
+
+            if(trayecto < 1){
+               let dispararAbajArribaIzq = 0;   
+               let dispararAbajArriba = 0; 
+               let dispararAbajArribaDer = 0; 
+            }
+            else{
+               let posX2 = cuadrado2.getX();
+               let posY2 = cuadrado2.getY();
+               
+               let posX1 = cuadrado.getX();
+               let posY1 = cuadrado.getY();
+
+               let tempX1 = proyectil.getX();
+               let tempY1 = proyectil.getY();
+
+               if(((((tempX1 + tamanoDis) > posX2) & (tempY1  < (posY2 + tamano))) & ((tempX1 + tamanoDis) < (posX2 + tamano) )) | (((tempX1  > posX2) & (tempY1 < (posY2 + tamano))) & (tempX1 < (posX2 + tamano)))){
+                  let direccion2 = 0;
+                  do cuadrado2.borrar();
+                  let loose2 = true;
+               }
+
+               if((((tempX1 < (posX1+tamano)) & ((tempY1 + tamanoDis) > posY1)) & ((tempY1+tamanoDis) < (posY1 + tamano))) | (((tempX1 < (posX1+tamano)) & (tempY1 > posY1)) & (tempY1 < (posY1 + tamano)))){
+                  let direccion = 0;
+                  do cuadrado.borrar();
+                  let loose1 = true;
+               }
+
+
+               do proyectil.moverIzqArr();
+
+            }
+         }
+      }
+   }
+
+   if(dispararAbajArribaDer = 1){
+          if(trayecto < 1){
+            let posX4 = cuadrado4.getX();
+            let posY4 = cuadrado4.getY()-16;
+
+            let disparos3 = disparos3 + 1;
+
+            let proyectil = Disparo.new(posX4, posY4, 15);
+            let trayecto = 1;
+            
+            do cuadrado4.dibujar();
+         }
+         else{
+            if(disparos3 < 11){
+            //Consulta si ya toco pared el disparo
+            let trayecto = proyectil.getTrayecto();
+
+            if(trayecto < 1){
+               let dispararAbajArribaIzq = 0;   
+               let dispararAbajArriba = 0; 
+               let dispararAbajArribaDer = 0;   
+            }
+            else{
+               let posX2 = cuadrado2.getX();
+               let posY2 = cuadrado2.getY();
+               
+               let posX3 = cuadrado3.getX();
+               let posY3 = cuadrado3.getY();
+
+               let tempX1 = proyectil.getX();
+               let tempY1 = proyectil.getY();
+
+               if((((tempX1 > posX3) & (tempY1 > posY3)) & (tempY1 < (posY3 + tamano))) | ((((tempX1+tamanoDis) > posX3) & ((tempY1+tamanoDis) > posY3)) & ((tempY1 + tamanoDis) < (posY3 + tamano)))){
+                  let direccion3 = 0;
+                  do cuadrado3.borrar();
+                  let loose3 = true;
+               }
+
+               if(((((tempX1 + tamanoDis) > posX2) & (tempY1  < (posY2 + tamano))) & ((tempX1 + tamanoDis) < (posX2 + tamano) )) | (((tempX1  > posX2) & (tempY1 < (posY2 + tamano))) & (tempX1 < (posX2 + tamano)))){
+                  let direccion2 = 0;
+                  do cuadrado2.borrar();
+                  let loose2 = true;
+               }
+
+               do proyectil.moverDerArr();
+               
+               
+            }
+         }
+      }
+   }
+
+   if(dispararDer = 1){
+          if(trayecto2 < 1){
+            let posX3 = cuadrado3.getX()-16;
+            let posY3 = cuadrado3.getY();
+
+            let disparos3 = disparos3 + 1;
+
+            let proyectil2 = Disparo.new(posX3, posY3, 15);
+            let trayecto2 = 1;
+            
+            do cuadrado3.dibujar();
+         }
+         else{
+            if(disparos3 < 11){
+            //Consulta si ya toco pared el disparo
+            let trayecto2 = proyectil2.getTrayecto();
+
+            if(trayecto2 < 1){
+               let dispararDer = 0;   
+               let dispararDerDer = 0; 
+               let dispararDerIzq = 0;   
+            }
+            else{
+
+               let posX1 = cuadrado.getX();
+               let posY1 = cuadrado.getY();
+
+               let tempX1 = proyectil2.getX();
+               let tempY1 = proyectil2.getY();
+
+               if((((tempX1 < (posX1+tamano)) & ((tempY1 + tamanoDis) > posY1)) & ((tempY1+tamanoDis) < (posY1 + tamano))) | (((tempX1 < (posX1+tamano)) & (tempY1 > posY1)) & (tempY1 < (posY1 + tamano)))){
+                  let direccion = 0;
+                  do cuadrado.borrar();
+                  let loose1 = true;
+               }
+
+               do proyectil2.moverIzq();
+            }
+         }
+      }
+   }
+
+   if(dispararDerIzq = 1){
+          if(trayecto2 < 1){
+            let posX3 = cuadrado3.getX()-16;
+            let posY3 = cuadrado3.getY();
+
+            let disparos3 = disparos3 + 1;
+
+            let proyectil2 = Disparo.new(posX3, posY3, 15);
+            let trayecto2 = 1;
+            
+            do cuadrado3.dibujar();
+         }
+         else{
+            if(disparos3 < 11){
+            //Consulta si ya toco pared el disparo
+            let trayecto2 = proyectil2.getTrayecto();
+
+            if(trayecto2 < 1){
+               let dispararDer = 0;   
+               let dispararDerDer = 0; 
+               let dispararDerIzq = 0;   
+            }
+            else{
+
+               let posX4 = cuadrado4.getX();
+               let posY4 = cuadrado4.getY();
+
+               let tempX1 = proyectil2.getX();
+               let tempY1 = proyectil2.getY();
+
+               if((((tempX1 < (posX4 + tamano)) & ((tempY1 + tamanoDis)  > posY4)) & (tempX1 > posX4 )) | ((((tempX1 + tamano) > posX4) & ((tempY1 + tamanoDis) > posY4)) & ((tempX1 + tamanoDis) < (posX4 + tamano)))){
+                  let direccion4 = 0;
+                  do cuadrado4.borrar();
+                  let loose4 = true;
+               }
+               
+               
+               do proyectil2.moverIzqAbaj();
+            }
+         }
+      }
+   }
+
+   if(dispararDerDer = 1){
+          if(trayecto2 < 1){
+            let posX3 = cuadrado3.getX()-16;
+            let posY3 = cuadrado3.getY();
+
+            let disparos3 = disparos3 + 1;
+
+            let proyectil2 = Disparo.new(posX3, posY3, 15);
+            let trayecto2 = 1;
+            
+            do cuadrado3.dibujar();
+         }
+         else{
+            if(disparos3 < 11){
+            //Consulta si ya toco pared el disparo
+            let trayecto2 = proyectil2.getTrayecto();
+
+            if(trayecto2 < 1){
+               let dispararDer = 0;   
+               let dispararDerDer = 0; 
+               let dispararDerIzq = 0;   
+            }
+            else{
+               let posX2 = cuadrado2.getX();
+               let posY2 = cuadrado2.getY();
+
+               let tempX1 = proyectil2.getX();
+               let tempY1 = proyectil2.getY();
+
+               if(((((tempX1 + tamanoDis) > posX2) & (tempY1  < (posY2 + tamano))) & ((tempX1 + tamanoDis) < (posX2 + tamano) )) | (((tempX1  > posX2) & (tempY1 < (posY2 + tamano))) & (tempX1 < (posX2 + tamano)))){
+                  let direccion2 = 0;
+                  do cuadrado2.borrar();
+                  let loose2 = true;
+               }
+               
+               do proyectil2.moverIzqArr();
+               
+            }
+            
+         }
+      }
+   }
+
+   if(dispararArr= 1){
+          if(trayecto3 < 1){
+            let posX2 = cuadrado2.getX();
+            let posY2 = cuadrado2.getY()+31;
+
+            let disparos2 = disparos2 + 1;
+
+            let proyectil3 = Disparo.new(posX2, posY2, 15);
+            let trayecto3 = 1;
+            
+            do cuadrado2.dibujar();
+         }
+         else{
+            if(disparos2 < 11){
+            //Consulta si ya toco pared el disparo
+            let trayecto3 = proyectil3.getTrayecto();
+
+            if(trayecto3 < 1){
+               let dispararArr = 0;   
+               let dispararArrIzq = 0; 
+               let dispararArrDer = 0;   
+            }
+            else{
+
+               let posX4 = cuadrado4.getX();
+               let posY4 = cuadrado4.getY();
+
+               let tempX1 = proyectil3.getX();
+               let tempY1 = proyectil3.getY();
+
+               if(((((tempX1 + tamanoDis) > posX4) & ((tempY1 + tamanoDis)  > posY4)) & ((tempX1 + tamanoDis) < (posX4 + tamano) )) | (((tempX1  > posX4) & ((tempY1 + tamanoDis) > posY4 )) & (tempX1 < (posX4 + tamano)))){
+                  let direccion4 = 0;
+                  do cuadrado4.borrar();
+                  let loose4 = true;
+               }
+
+               do proyectil3.moverAbajo();
+               
+               
+            }
+         }
+      }
+   }
+
+   if(dispararArrIzq= 1){
+          if(trayecto3 < 1){
+            let posX2 = cuadrado2.getX();
+            let posY2 = cuadrado2.getY()+31;
+
+            let disparos2 = disparos2 + 1;
+
+            let proyectil3 = Disparo.new(posX2, posY2, 15);
+            let trayecto3 = 1;
+            
+            do cuadrado2.dibujar();
+         }
+         else{
+            if(disparos2 < 11){
+            //Consulta si ya toco pared el disparo
+            let trayecto3 = proyectil3.getTrayecto();
+
+            if(trayecto3 < 1){
+               let dispararArr = 0;   
+               let dispararArrIzq = 0; 
+               let dispararArrDer = 0;   
+            }
+            else{
+               
+               let posX1 = cuadrado.getX();
+               let posY1 = cuadrado.getY();
+
+               let posX4 = cuadrado4.getX();
+               let posY4 = cuadrado4.getY();
+
+               let tempX1 = proyectil3.getX();
+               let tempY1 = proyectil3.getY();
+
+               if((((tempX1 < (posX1 + tamano)) & ((tempY1 + tamanoDis)  > posY1)) & ((tempY1 + tamanoDis) < (posY1 + tamano) )) | (((tempX1  < (posX1 + tamano)) & (tempY1 > posY1 )) & (tempY1 < (posY1 + tamano)))){
+                  let direccion = 0;
+                  do cuadrado.borrar();
+                  let loose1 = true;
+               }
+
+               if(((((tempX1 + tamanoDis) > posX4) & ((tempY1 + tamanoDis)  > posY4)) & ((tempX1 + tamanoDis) < (posX4 + tamano) )) | (((tempX1  > posX4) & ((tempY1 + tamanoDis) > posY4 )) & (tempX1 < (posX4 + tamano)))){
+                  let direccion4 = 0;
+                  do cuadrado4.borrar();
+                  let loose4 = true;
+               }
+
+               do proyectil3.moverIzqAbaj();
+               
+               
+            }
+         }
+      }
+   }
+
+   if(dispararArrDer= 1){
+          if(trayecto3 < 1){
+            let posX2 = cuadrado2.getX();
+            let posY2 = cuadrado2.getY()+31;
+
+            let disparos2 = disparos2 + 1;
+
+            let proyectil3 = Disparo.new(posX2, posY2, 15);
+            let trayecto3 = 1;
+            
+            do cuadrado2.dibujar();
+         }
+         else{
+            if(disparos2 < 11){
+            //Consulta si ya toco pared el disparo
+            let trayecto3 = proyectil3.getTrayecto();
+
+            if(trayecto3 < 1){
+               let dispararArr = 0;   
+               let dispararArrIzq = 0; 
+               let dispararArrDer = 0;   
+            }
+            else{
+               let posX3 = cuadrado3.getX();
+               let posY3 = cuadrado3.getY();
+
+               let posX4 = cuadrado4.getX();
+               let posY4 = cuadrado4.getY();
+
+               let tempX1 = proyectil3.getX();
+               let tempY1 = proyectil3.getY();
+
+               if(((((tempX1 + tamanoDis) > posX3 ) & ((tempY1 + tamanoDis)  > posY3)) & ((tempY1 + tamanoDis) < (posY3 + tamano) )) | ((((tempX1 + tamanoDis) > posX3) & (tempY1 > posY3 )) & (tempY1 < (posY3 + tamano)))){
+                  
+                  let direccion3 = 0;
+                  do cuadrado3.borrar();
+                  let loose3 = true;
+               }
+
+               if(((((tempX1 + tamanoDis) > posX4) & ((tempY1 + tamanoDis)  > posY4)) & ((tempX1 + tamanoDis) < (posX4 + tamano) )) | (((tempX1  > posX4) & ((tempY1 + tamanoDis) > posY4 )) & (tempX1 < (posX4 + tamano)))){
+                  let direccion4 = 0;
+                  do cuadrado4.borrar();
+                  let loose4 = true;
+               }
+
+               do proyectil3.moverDerAbaj();
+               
+            }
+            
+         }
+      }
+   }
+
+   if(dispararIzq = 1){
+          if(trayecto4 < 1){
+            let posX1 = cuadrado.getX()+31;
+            let posY1 = cuadrado.getY();
+
+            let disparos1 = disparos1 + 1;
+
+            let proyectil4 = Disparo.new(posX1, posY1, 15);
+            let trayecto4 = 1;
+            
+            do cuadrado.dibujar();
+         }
+         else{
+            if(disparos1 < 11){
+            //Consulta si ya toco pared el disparo
+            let trayecto4 = proyectil4.getTrayecto();
+
+            if(trayecto4 < 1){
+               let dispararIzq = 0;   
+               let dispararIzqDer = 0; 
+               let dispararIzqIzq = 0;   
+            }
+            else{
+               let posX3 = cuadrado3.getX();
+               let posY3 = cuadrado3.getY();
+
+               let tempX1 = proyectil4.getX();
+               let tempY1 = proyectil4.getY();
+
+               if(((((tempX1 + tamanoDis) > posX3 ) & ((tempY1 + tamanoDis)  > posY3)) & ((tempY1 + tamanoDis) < (posY3 + tamano) )) | ((((tempX1 + tamanoDis) > posX3) & (tempY1 > posY3 )) & (tempY1 < (posY3 + tamano)))){
+                  
+                  let direccion3 = 0;
+                  do cuadrado3.borrar();
+                  let loose3 = true;
+               }
+
+               do proyectil4.moverDer();
+            }
+         }
+      }
+   }
+
+   if(dispararIzqIzq = 1){
+          if(trayecto4 < 1){
+            let posX1 = cuadrado.getX()+31;
+            let posY1 = cuadrado.getY();
+
+            let disparos1 = disparos1 + 1;
+
+            let proyectil4 = Disparo.new(posX1, posY1, 15);
+            let trayecto4 = 1;
+            
+            do cuadrado.dibujar();
+         }
+         else{
+            if(disparos1 < 11){
+            //Consulta si ya toco pared el disparo
+            let trayecto4 = proyectil4.getTrayecto();
+
+            if(trayecto4 < 1){
+               let dispararIzq = 0;   
+               let dispararIzqDer = 0; 
+               let dispararIzqIzq = 0;   
+            }
+            else{
+               let posX2 = cuadrado2.getX();
+               let posY2 = cuadrado2.getY();
+
+               let tempX1 = proyectil4.getX();
+               let tempY1 = proyectil4.getY();
+
+               if(((((tempX1 + tamanoDis) > posX2) & (tempY1  < (posY2 + tamano))) & ((tempX1 + tamanoDis) < (posX2 + tamano) )) | (((tempX1  > posX2) & (tempY1 < (posY2 + tamano))) & (tempX1 < (posX2 + tamano)))){
+                  
+                  let direccion2 = 0;
+                  do cuadrado2.borrar();
+                  let loose2 = true;
+               }
+               
+               do proyectil4.moverDerArr();
+            }
+            
+         }
+      }
+   }
+
+   if(dispararIzqDer = 1){
+          if(trayecto4 < 1){
+            let posX1 = cuadrado.getX()+31;
+            let posY1 = cuadrado.getY();
+
+            let disparos1 = disparos1 + 1;
+
+            let proyectil4 = Disparo.new(posX1, posY1, 15);
+            let trayecto4 = 1;
+            
+            do cuadrado.dibujar();
+         }
+         else{
+            if(disparos1 < 11){
+            //Consulta si ya toco pared el disparo
+            let trayecto4 = proyectil4.getTrayecto();
+
+            if(trayecto4 < 1){
+               let dispararIzq = 0;   
+               let dispararIzqDer = 0; 
+               let dispararIzqIzq = 0;   
+            }
+            else{
+               
+               let posX4 = cuadrado4.getX();
+               let posY4 = cuadrado4.getY();
+
+               let tempX1 = proyectil4.getX();
+               let tempY1 = proyectil4.getY();
+
+               if(((((tempX1 + tamanoDis) > posX4) & ((tempY1 + tamanoDis)  > posY4)) & ((tempX1 + tamanoDis) < (posX4 + tamano) )) | (((tempX1  > posX4) & ((tempY1 + tamanoDis) > posY4 )) & (tempX1 < (posX4 + tamano)))){
+                  let direccion4 = 0;
+                  do cuadrado4.borrar();
+                  let loose4 = true;
+               }
+
+               do proyectil4.moverDerAbaj();
+            
+            }
+         }
+      }
+   }
+      do Sys.wait(5);  // espera de siguientes acciones
+      return;
+   }
+
+   method void runDisparo(int valX, int valY){
+
+      let proyectil = Disparo.new(valX, valY,20);
+      let trayecto = 1;
+
+      return;
+   }
+
+   method void run() {
+      var char key;  // tecla presionada
+
+      var boolean exit;
+      let exit = false;
+      
+      while (~exit) {
+         // ciclo espernado teclas
+         while (key = 0) {
+            let key = Keyboard.keyPressed();
+            do moverCuadrado();
+         }
+
+         //Movimiento cuadrado 1
+
+         if (key = 131 &  ~(loose1)) { let direccion = 1; }   // tecla flecha arriba
+         if (key = 133 &  ~(loose1)) { let direccion = 2; }   // tecla flecha abajo
+         
+         if (key = 49 &  ~(loose1) )  {
+            if((dispararIzqIzq = 0) & (dispararIzqDer = 0)){
+               let dispararIzq = 1; 
+            }
+         }   // tecla 1
+         
+         if (key = 50 &  ~(loose1) )  {
+            if((dispararIzq = 0) & (dispararIzqDer = 0)){
+               let dispararIzqIzq = 1; 
+            }
+         }   // tecla 2
+
+         if (key = 51 &  ~(loose1) )  {
+            if((dispararIzq = 0) & (dispararIzqIzq = 0)){
+               let dispararIzqDer = 1; 
+            }
+         }   // tecla 3
+
+         //Movimiento cuadrado 2
+
+         if ((key = 83) &  ~loose2) { let direccion2 = 1; }   // s
+         if ((key = 68) & ~loose2) { let direccion2 = 2; }   // d
+
+         if (key = 81 &  ~(loose2) )  {
+            if((dispararArr = 0) & (dispararArrDer = 0)){
+               let dispararArrIzq = 1; 
+            }
+         }   // tecla Q
+
+         if (key = 87 &  ~(loose2) )  {
+            if((dispararArrIzq = 0) & (dispararArrDer = 0)){
+               let dispararArr = 1; 
+            }
+         }   // tecla W
+
+         if (key = 69 &  ~(loose2) )  {
+            if((dispararArr = 0) & (dispararIzq = 0)){
+               let dispararArrDer = 1; 
+            }
+         }   // tecla E
+
+
+         //Movimiento cuadrado 3
+
+         if (key = 85 &  ~(loose3))  { let direccion3 = 1; }   // tecla u
+         if (key = 74 &  ~(loose3))  { let direccion3 = 2; }   // telca j
+
+         if (key = 89 &  ~(loose3) )  {
+            if((dispararDerDer = 0) & (dispararDerIzq = 0)){
+               let dispararDer = 1; 
+            }
+         }   // tecla Y
+
+         if (key = 72 &  ~(loose3) )  {
+            if((dispararDerDer = 0) & (dispararDer = 0)){
+               let dispararDerIzq = 1; 
+            }
+         }   // tecla H
+
+         if (key = 84 &  ~(loose3) )  {
+            if((dispararDer = 0) & (dispararDerIzq = 0)){
+               let dispararDerDer = 1; 
+            }
+         }   // tecla T
+
+         //Movimineto cuadrado 4
+
+         if (key = 75 & ~(loose4))  { let direccion4 = 1; }   // telca k
+         if (key = 76 & ~(loose4))  { let direccion4 = 2; }   // telca l
+
+         if (key = 73 &  ~(loose4) )  {
+            if((dispararAbajArribaDer = 0) & (dispararAbajArriba = 0)){
+               let dispararAbajArribaIzq = 1; 
+            }
+         }   // tecla I
+         
+         if (key = 79 &  ~(loose4) )  {
+            if((dispararAbajArribaIzq = 0) & (dispararAbajArribaDer = 0)){
+               let dispararAbajArriba = 1; 
+            }
+         }   // tecla o
+
+         if (key = 80 &  ~(loose4) )  {
+            
+            if((dispararAbajArribaIzq = 0) & (dispararAbajArriba = 0)){
+               let dispararAbajArribaDer = 1; 
+            }
+ 
+         }   // tecla p
+
+         // Ciclo esperando liberar tecla para no hacer más funciones por error
+         while (~(key = 0)) {
+            let key = Keyboard.keyPressed();
+            do moverCuadrado();
+         }
+     } // while
+     return;
+   }
+}

@@ -1,0 +1,9 @@
+class Main {
+    function void main() {
+        var JuegoVaqueros juego;
+        let juego = JuegoVaqueros.new();
+        do juego.run();
+        do juego.dispose();
+        return;
+    }
+}
