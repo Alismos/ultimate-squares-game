@@ -1,8 +1,18 @@
-# ultimate-squares-game
 
+# Ultimate Square Game
+## pre requirements: 
+- Nand2tetris [software](https://www.nand2tetris.org/software) Jack 
+- Add a path variable to JackCompiler.bat
+## Usage
+- Compile the jack folder with the VM Emulator.
+- Open the jack folder with the VM Emulator and run it. 
+  
+## Info
+This is a game created in Jack.
 
 Each Block has 10 shots and can fire only one shot per time (until the shot hits a wall). If a block is hit by a shot, it is eliminated and cannot execute any movement or shot.
 
+## Rules
 Keys for squares:
 
 Square Left:
